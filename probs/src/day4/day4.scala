@@ -21,12 +21,19 @@ object day4 {
       }
       println(s"digits repeats itself in $pwd")
 
-      val repeatingDigit = arr.zipWithIndex.groupBy(_._1).filter(_._2.size > 1)
+      val repeatingDigit =  arr.zipWithIndex.groupBy(_._1).filter(_._2.size > 1)
+      var doubleGrouping = false
+      //var minimumGroupSize = 0
       repeatingDigit.foreach{
         case (key,value) =>
           //println(s"digit: $key, index: $value")
           val indexList = value.map(_._2)
-          //println(s"digit: $key, index list -> $indexList")
+          println(s"digit: $key, index list -> $indexList, index list size -> ${indexList.size}")
+          if(indexList.size == 2) {
+            println(s"digit: $key, has double grouping")
+            doubleGrouping = true
+          }
+
           for(i <- 1 to indexList.size - 1) {
             if(indexList(i) - indexList(i-1) != 1) {
               //println(s"${indexList(i)}, ${indexList(i - 1)}")
@@ -37,6 +44,12 @@ object day4 {
             }
           }
           println(s"repeating digits are adjacent for digit: $key")
+      }
+
+      if(!doubleGrouping) {
+        metCriteria = false
+        println(s"pwd: $pwd doesn't have double grouping")
+        break
       }
 
       for (i <- 1 to arr.size - 1) {
@@ -55,6 +68,9 @@ object day4 {
 
   def main(args: Array[String]): Unit = {
     var passwordStatisfyCounter = 0
+    passwordCriteriaMet(112233)
+    passwordCriteriaMet(123444)
+    passwordCriteriaMet(111122)
     passwordCriteriaMet(223450)
     passwordCriteriaMet(111123)
     passwordCriteriaMet(135679)
