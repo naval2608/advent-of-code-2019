@@ -2,6 +2,7 @@ package day3
 
 import scala.collection.mutable
 import scala.io.Source
+import util.control.Breaks._
 
 object day3 {
 
@@ -59,6 +60,50 @@ object day3 {
     (endRowIndex, endColumnIndex)
   }
 
+  def traverseDirectionTillDestAndGetSteps(input: String, arr: Array[Array[Char]],
+                        startingPoint: (Int, Int), dest: (Int, Int)): ((Int,Int),Int) = {
+    var steps = 0
+    val direction = input.substring(0, 1)
+    val traversableLength = input.substring(1).toInt
+    var (endRowIndex, endColumnIndex) = startingPoint
+    breakable {
+      for (i <- 0 to traversableLength - 1) {
+        direction match {
+          case "R" => endColumnIndex += 1 //; symbol = '-'
+          case "U" => endRowIndex -= 1 //; symbol = '|'
+          case "L" => endColumnIndex -= 1 //; symbol = '-'
+          case "D" => endRowIndex += 1 //; symbol = '|'
+        }
+        steps += 1
+        if ((endRowIndex, endColumnIndex) == dest) {
+          //println(s"reached dest- $dest inside input $input, steps- $steps")
+          break
+        }
+      }
+      //println(s"traversed input- $input, index- ${(endRowIndex, endColumnIndex)}, steps- $steps")
+    }
+    ((endRowIndex, endColumnIndex), steps)
+  }
+
+  def traverseWireTillDestAndGetSteps(wire: Array[String], arr: Array[Array[Char]],
+                                      startingPoint: (Int, Int), dest: (Int, Int)): Int = {
+    var stepCounter = 0
+    var endingIndices = startingPoint
+    breakable {
+      println(s"starting steps counter for ${wire.mkString(",")}")
+      for (path <- wire) {
+        val (newEndingIndices, steps) = traverseDirectionTillDestAndGetSteps(path, arr, endingIndices, dest)
+        stepCounter += steps
+        endingIndices = newEndingIndices
+        if (endingIndices == dest) {
+          println(s"Reached dest $dest of wire: ${wire.mkString(",")}, breaking wire traversal, " +
+            s"total steps $stepCounter")
+          break
+        }
+      }
+    }
+    stepCounter
+  }
 
   //traverse single wire input like "R8","U5","L5","D3"
   def traverseWire(wire: Array[String], arr: Array[Array[Char]], startingPoint: (Int, Int), wireInfo: Int) = {
@@ -111,13 +156,21 @@ object day3 {
     traverseWire(wire2, arr, centre, 2)
     //printArr(arr)
     val distanceList = new scala.collection.mutable.ListBuffer[Int]
+    val stepsList = new scala.collection.mutable.ListBuffer[Int]
     println(s"\n\ncentral point -> ${centre}")
     for(intersection <- getIntersections(arr)) {
       val ds = (centre._1 - intersection._1).abs + (centre._2 - intersection._2).abs
       distanceList += ds
-      println(s"Intersection -> $intersection Distance -> $ds")
+      val wire1Steps = traverseWireTillDestAndGetSteps(wire1, arr, centre, intersection)
+      val wire2Steps = traverseWireTillDestAndGetSteps(wire2, arr, centre, intersection)
+      stepsList += (wire1Steps+wire2Steps)
+      println(s"Intersection -> $intersection Distance -> $ds" +
+        s" wire1Steps -> $wire1Steps" +
+        s" wire2Steps -> $wire2Steps" +
+        s" totalsteps" -> (wire1Steps+wire2Steps))
     }
     println(s"minimum DS -> ${distanceList.min}")
+    println(s"minimum steps -> ${stepsList.min}")
     distanceList.min
   }
 
