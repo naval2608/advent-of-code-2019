@@ -178,7 +178,8 @@ object day3 {
     getIntersectionPoints(Array("R8","U5","L5","D3"), Array("U7","R6","D4","L4"))
 
     println("===================")
-    getIntersectionPoints(Array("R75","D30","R83","U83","L12","D49","R71","U7","L72"), Array("U62","R66","U55","R34","D71","R55","D58","R83"))
+    getIntersectionPoints(Array("R75","D30","R83","U83","L12","D49","R71","U7","L72"),
+      Array("U62","R66","U55","R34","D71","R55","D58","R83"))
 
     println("===================")
     getIntersectionPoints(Array("R98","U47","R26","D63","R33","U87","L62","D20","R33","U53","R51"),
