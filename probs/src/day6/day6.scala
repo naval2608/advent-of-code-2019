@@ -30,7 +30,7 @@ object day6 {
     orbits.keySet.foreach(objj => {
       val lst = orbitsForObject(objj)
       totalOrbits += lst.size
-      println(s"$objj -> orbits: ${lst.mkString(",")} Size: ${lst.size}")
+      //println(s"$objj -> orbits: ${lst.mkString(",")} Size: ${lst.size}")
     })
 
     println(s"totalOrbits: $totalOrbits")
@@ -46,7 +46,7 @@ object day6 {
       orbitsForYou.foreach(
         objj => {
           hopCounter += 1
-          println(s"hopped $objj for YOU, hop counter $hopCounter")
+          //println(s"hopped $objj for YOU, hop counter $hopCounter")
           if (orbitsForSan.contains(objj)) {
             println(s"Found ${objj}")
             hco = objj
@@ -61,7 +61,7 @@ object day6 {
       orbitsForSan.foreach(
         objj => {
           hopCounter += 1
-          println(s"hopped $objj for SAN, hop counter $hopCounter")
+          //println(s"hopped $objj for SAN, hop counter $hopCounter")
           if (objj.equals(hco)) {
             println(s"Found ${hco}")
             break()
