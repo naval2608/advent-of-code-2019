@@ -1,14 +1,10 @@
 package day6
 
-
 import scala.collection.mutable.{HashMap, ListBuffer}
 import scala.io.Source
 import util.control.Breaks._
 
 object day6 {
-
-
-  //assumption - any object can have only 1 direct orbit.
 
   val orbits = HashMap.empty[String, String]
 
@@ -31,11 +27,13 @@ object day6 {
     val map = Source.fromFile(file).getLines().toList
     var totalOrbits = 0
     map.foreach(path => contructOrbital(path))
-    //    orbits.keySet.foreach(objj => {
-    //      val lst = orbitsForObject(objj)
-    //      totalOrbits += lst.size
-    //      println(s"$objj -> orbits: ${lst.mkString(",")} Size: ${lst.size}")
-    //    })
+    orbits.keySet.foreach(objj => {
+      val lst = orbitsForObject(objj)
+      totalOrbits += lst.size
+      println(s"$objj -> orbits: ${lst.mkString(",")} Size: ${lst.size}")
+    })
+
+    println(s"totalOrbits: $totalOrbits")
 
     println(orbitsForObject("YOU").mkString(","))
     println(orbitsForObject("SAN").mkString(","))
