@@ -6,18 +6,18 @@ import scala.io.Source
 
 object day2 {
 
-  def genIntcode(lst : ListBuffer[Long]): ListBuffer[Long] = {
+  def genIntcode(lst : ListBuffer[Int]): ListBuffer[Int] = {
     var keepGoing = true
 
-    def doOperation(lstBuffer : ListBuffer[Long]) :
-      ListBuffer[Long] = {
+    def doOperation(lstBuffer : ListBuffer[Int]) :
+      ListBuffer[Int] = {
       lstBuffer(0) match {
         case 1 =>  {
-          lst(lstBuffer(3).toInt) = lst(lstBuffer(1).toInt) + lst(lstBuffer(2).toInt)
+          lst(lstBuffer(3)) = lst(lstBuffer(1)) + lst(lstBuffer(2))
           //println(lst.mkString(","))
         }
         case 2 =>  {
-          lst(lstBuffer(3).toInt) = lst(lstBuffer(1).toInt) * lst(lstBuffer(2).toInt)
+          lst(lstBuffer(3)) = lst(lstBuffer(1)) * lst(lstBuffer(2))
           //println(lst.mkString(","))
         }
         case 99 =>  {
@@ -46,7 +46,7 @@ object day2 {
     genIntcode(ListBuffer(1,9,10,3,2,3,11,0,99,30,40,50))
 
     val file = "/Users/naval.gupta/code/advent-of-code-2019/probs/src/day2/input-day2.txt"
-    val lst  = Source.fromFile(file).getLines().toList(0).split(",").map(_.toLong).to[ListBuffer]
+    val lst  = Source.fromFile(file).getLines().toList(0).split(",").map(_.toInt).to[ListBuffer]
 
     lst(1)=23
     lst(2)=23
@@ -54,7 +54,7 @@ object day2 {
     println;println
     for(i <-  Range(0,100)) {
       for(j <- Range(0,100)) {
-        val lstPart2 = Source.fromFile(file).getLines().toList(0).split(",").map(_.toLong).to[ListBuffer]
+        val lstPart2 = Source.fromFile(file).getLines().toList(0).split(",").map(_.toInt).to[ListBuffer]
         lstPart2(1)=i
         lstPart2(2)=j
         val newlst = genIntcode(lstPart2)
