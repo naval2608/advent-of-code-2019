@@ -145,11 +145,6 @@ object day5 {
 //    printInstruction(readInstruction(99))
 //    printInstruction(readInstruction(11002))
 //    printInstruction(readInstruction(31002))
-//    genIntcode(ListBuffer(1, 0, 0, 0, 99))
-//    genIntcode(ListBuffer(2, 3, 0, 3, 99))
-//    genIntcode(ListBuffer(2, 4, 4, 5, 99, 0))
-//    genIntcode(ListBuffer(1, 1, 1, 4, 99, 5, 6, 0, 99))
-//    genIntcode(ListBuffer(1, 9, 10, 3, 2, 3, 11, 0, 99, 30, 40, 50))
 
 //    genIntcode(ListBuffer(1002,4,3,4,33))
 //    println("==========")
@@ -158,25 +153,5 @@ object day5 {
     val file = "/Users/naval.gupta/code/advent-of-code-2019/probs/src/day5/input.txt"
     val lst = Source.fromFile(file).getLines().toList(0).split(",").map(_.toInt).to[ListBuffer]
     genIntcode(lst)
-//
-//    lst(1) = 23
-//    lst(2) = 23
-//    println(genIntcode(lst).mkString(","))
-//    println;
-//    println
-//    for (i <- Range(0, 100)) {
-//      for (j <- Range(0, 100)) {
-//        val lstPart2 = Source.fromFile(file).getLines().toList(0).split(",").map(_.toInt).to[ListBuffer]
-//        lstPart2(1) = i
-//        lstPart2(2) = j
-//        val newlst = genIntcode(lstPart2)
-//        if (newlst(0) == 19690720) {
-//          println(newlst.mkString(","))
-//          println(s"${newlst(0)} :: ${newlst(1)} :: ${newlst(2)}")
-//        }
-//      }
-//    }
-
-    //19690720 :: 23 :: 47
   }
 }
