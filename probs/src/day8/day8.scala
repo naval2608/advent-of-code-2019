@@ -70,16 +70,11 @@ object day8 {
         //get all the layers now
         breakable {
           for (z <- 0 until img.size) {
-
-            val digit = img(z)(i)(j)
-            val x = ""
-
-            digit match {
+            img(z)(i)(j) match {
               case 0 => print(" ");break()
               case 1 => print("*");break()
               case 2 => //no_op
             }
-
           }
         }
       }
