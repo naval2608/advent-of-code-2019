@@ -1,6 +1,6 @@
 package day8
 
-import scala.collection.mutable._
+import scala.collection.mutable
 import scala.io.Source
 import util.control.Breaks._
 
@@ -9,7 +9,7 @@ object day8 {
 
   def layout(width: Int, tall: Int, digits: collection.Seq[Int]) : Array[Array[Array[Int]]] = {
     val numLayers = digits.size / (tall * width)
-    var digitTracker = collection.mutable.HashMap.empty[Int, tracker]
+    var digitTracker = mutable.HashMap.empty[Int, tracker]
     val layer = Array.ofDim[Int](numLayers, tall, width)
     var counter = 0
 
@@ -72,7 +72,7 @@ object day8 {
           for (z <- 0 until img.size) {
             img(z)(i)(j) match {
               case 0 => print(" ");break()
-              case 1 => print("*");break()
+              case 1 => print(".");break()
               case 2 => //no_op
             }
           }
