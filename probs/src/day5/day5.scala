@@ -7,7 +7,7 @@ case class Instruction(opCode: Int, parameter: Option[Seq[Int]])
 
 object day5 {
 
-  val validOpcodeExcept99 = List(1,2,3,4)
+  val validOpcodeExcept99 = List(1,2,3,4,7,8,5,6)
   var keepGoing = true
   var currentIndexTracker: Int = 0
 
@@ -21,17 +21,20 @@ object day5 {
 
           if(other < 100 && other > 0) {
             opcode match {
-              case it if 1 to 2 contains it => Some(Seq(0,0,0))
-              case it if 3 to 4 contains it => Some(Seq(0))
+              case (1|2|7|8) => Some(Seq(0,0,0))
+              case (3|4) => Some(Seq(0))
+              case (5|6) => Some(Seq(0,0))
               case _ => throw new Exception(s"$uncodedInstruction is not a valid instruction" +
-                s"at index $currentIndexTracker")
+                s"at index " +
+                s"$currentIndexTracker")
             }
           } else if(other < 1000 && other >= 100) {
             val param1 = (other / 100) % 10
             assert(List(0,1).contains(param1))
             opcode match {
-              case it if 1 to 2 contains it => Some(Seq(param1, 0, 0))
-              case it if 3 to 4 contains it => Some(Seq(param1))
+              case (1|2|7|8) => Some(Seq(param1, 0, 0))
+              case (3|4) => Some(Seq(param1))
+              case (5|6) => Some(Seq(param1,0))
               case _ => throw new Exception(s"$uncodedInstruction is not a valid instruction" +
                 s"at index $currentIndexTracker")
             }
@@ -40,9 +43,10 @@ object day5 {
             val param2 = (other / 1000) % 10
             assert(List(0,1).contains(param1))
             assert(List(0,1).contains(param2))
-            assert(List(1,2).contains(opcode))
+            assert(List(1,2,5,6,7,8).contains(opcode))
             opcode match {
-              case it if 1 to 2 contains it => Some(Seq(param1, param2, 0))
+              case (1|2|7|8) => Some(Seq(param1, param2, 0))
+              case (5|6) => Some(Seq(param1, param2))
               case _ => throw new Exception(s"$uncodedInstruction is not a valid instruction" +
                 s"at index $currentIndexTracker")
             }
@@ -53,9 +57,9 @@ object day5 {
             assert(List(0,1).contains(param1))
             assert(List(0,1).contains(param2))
             assert(List(0,1).contains(param3))
-            assert(List(1,2).contains(opcode))
+            assert(List(1,2,7,8).contains(opcode))
             opcode match {
-              case it if 1 to 2 contains it  => Some(Seq(param1, param2, param3))
+              case (1|2|7|8)  => Some(Seq(param1, param2, param3))
               case _ => throw new Exception(s"$uncodedInstruction is not a valid instruction" +
                 s"at index $currentIndexTracker")
             }
@@ -92,7 +96,7 @@ object day5 {
     def doOperationAndUpdateCurrentIndex(ins: Instruction): Unit = {
       val paramSeq = ins.parameter.getOrElse(Seq())
       ins.opCode match {
-        case it if 1 to 2 contains it => {
+        case it@(1|2) => {
           //instruction is current index rn.
           val input1 = readInput(lst(currentIndexTracker + 1), paramSeq(0))
           val input2 = readInput(lst(currentIndexTracker + 2), paramSeq(1))
@@ -118,6 +122,36 @@ object day5 {
           val valueToprint = readInput(lst(currentIndexTracker + 1), paramSeq(0))
           println(s"PRINTING: ${valueToprint}")
           currentIndexTracker += 2
+        }
+        case 5 => {
+          val input1 = readInput(lst(currentIndexTracker + 1), paramSeq(0))
+          val input2 = readInput(lst(currentIndexTracker + 2), paramSeq(1))
+          println(s"input1 $input1, input2 $input2")
+          if(input1 != 0) currentIndexTracker=input2 else currentIndexTracker += 3
+        }
+        case 6 => {
+          val input1 = readInput(lst(currentIndexTracker + 1), paramSeq(0))
+          val input2 = readInput(lst(currentIndexTracker + 2), paramSeq(1))
+          println(s"input1 $input1, input2 $input2")
+          if(input1 == 0) currentIndexTracker=input2 else currentIndexTracker += 3
+        }
+        case 7 => {
+          val input1 = readInput(lst(currentIndexTracker + 1), paramSeq(0))
+          val input2 = readInput(lst(currentIndexTracker + 2), paramSeq(1))
+          println(s"input1 $input1, input2 $input2")
+          if(input1 < input2) writeOutput(lst(currentIndexTracker + 3), 0, 1)
+          else writeOutput(lst(currentIndexTracker + 3), 0, 0)
+
+          currentIndexTracker += 4
+        }
+        case 8 => {
+          val input1 = readInput(lst(currentIndexTracker + 1), paramSeq(0))
+          val input2 = readInput(lst(currentIndexTracker + 2), paramSeq(1))
+          println(s"input1 $input1, input2 $input2")
+          if(input1 == input2) writeOutput(lst(currentIndexTracker + 3), 0, 1)
+          else writeOutput(lst(currentIndexTracker + 3), 0, 0)
+
+          currentIndexTracker += 4
         }
       }
     }
@@ -150,8 +184,19 @@ object day5 {
 //    println("==========")
 //    genIntcode(ListBuffer(3,0,4,0,99))
 //    genIntcode(ListBuffer(1101,100,-1,4,0))
+    //genIntcode(ListBuffer(3,9,8,9,10,9,4,9,99,-1,8))
+    //genIntcode(ListBuffer(3,9,7,9,10,9,4,9,99,-1,8))
+    //genIntcode(ListBuffer(3,3,1108,-1,8,3,4,3,99))
+    //genIntcode(ListBuffer(3,3,1107,-1,8,3,4,3,99))
+    //genIntcode(ListBuffer(3,12,6,12,15,1,13,14,13,4,13,99,-1,0,1,9))
+    //genIntcode(ListBuffer(3,3,1105,-1,9,1101,0,0,12,4,12,99,1))
+//    genIntcode(ListBuffer(3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,
+//      1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,
+//      999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99))
+
     val file = "/Users/naval.gupta/code/advent-of-code-2019/probs/src/day5/input.txt"
     val lst = Source.fromFile(file).getLines().toList(0).split(",").map(_.toInt).to[ListBuffer]
     genIntcode(lst)
+
   }
 }
